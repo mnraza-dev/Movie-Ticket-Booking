@@ -8,11 +8,11 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 
-
-// Import routes
 import movieRoutes from "./routes/movieRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 app.use("/api/movies", movieRoutes);
+app.use("/api/users", userRoutes);
 
 app.listen(PORT, () => {
   connectDB();

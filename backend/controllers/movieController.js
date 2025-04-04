@@ -1,7 +1,14 @@
-import Movie from "../models/Movie.js";
+import { Movie } from "../models/Movie.js";
 export const getMovies = async (req, res) => {
   try {
-    res.json({ message: "Get Movies" });
+    const movies = await Movie.find();
+    if (!movies) {
+      return res.status(404).json({ message: "No movies found" });
+    }
+    res.status(200).json({
+      message: "Movies retrieved successfully",
+      data: movies,
+    });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -20,6 +27,8 @@ export const addMovie = async (req, res) => {
     res.status(201).json({ message: "Movie added successfully", movie });
     res.json({ message: "Add Movie" });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };

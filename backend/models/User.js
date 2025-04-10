@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 const userSchema = new mongoose.Schema(
   {
-    firstname: { type: String, trim: true },
-    lastname: { type: String, trim: true },
+    fullname: { type: String, trim: true },
     email: {
       type: String,
       required: true,

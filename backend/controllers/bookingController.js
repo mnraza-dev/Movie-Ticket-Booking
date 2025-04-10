@@ -10,7 +10,9 @@ export const createBooking = async (req, res) => {
   console.log("🔐 Authenticated user:", req.user);
 
   if (!req.user || !req.user._id) {
-    return res.status(401).json({ message: "Unauthorized. User info missing." });
+    return res
+      .status(401)
+      .json({ message: "Unauthorized. User info missing." });
   }
 
   try {
@@ -18,7 +20,9 @@ export const createBooking = async (req, res) => {
     console.log("🎬 Showtime found:", showtime);
 
     if (!showtime || !showtime.movie) {
-      return res.status(404).json({ message: "Invalid or missing movie/showtime" });
+      return res
+        .status(404)
+        .json({ message: "Invalid or missing movie/showtime" });
     }
 
     if (numberOfTickets > showtime.availableSeats) {
@@ -35,7 +39,7 @@ export const createBooking = async (req, res) => {
     let razorpayOrder;
     try {
       razorpayOrder = await razorpay.orders.create({
-        amount: totalPrice * 100, // Razorpay expects amount in paise
+        amount: totalPrice * 100,
         currency: "INR",
         receipt: `receipt_${Date.now()}`,
       });
@@ -76,7 +80,9 @@ export const createBooking = async (req, res) => {
 
 export const getBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user._id }).populate("movie");
+    const bookings = await Booking.find({ user: req.user._id }).populate(
+      "movie"
+    );
     res.status(200).json(bookings);
   } catch (error) {
     res.status(500).json({
@@ -94,7 +100,9 @@ export const cancelBooking = async (req, res) => {
     });
 
     if (!booking) {
-      return res.status(404).json({ message: "Booking not found or unauthorized" });
+      return res
+        .status(404)
+        .json({ message: "Booking not found or unauthorized" });
     }
 
     res.status(200).json({ message: "Booking cancelled successfully" });

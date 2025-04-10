@@ -41,14 +41,14 @@ function Register() {
 
           <div className="space-y-2">
             <Label htmlFor="email" className="text-white">
-              Email or Phone Number
+              Email
             </Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email or phone number"
+              placeholder="Enter Your Email "
               className="w-full bg-gray-700 text-white border-gray-600 focus:border-red-600 focus:ring-red-600"
             />
           </div>
@@ -62,7 +62,7 @@ function Register() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder="Enter Your Password"
               className="w-full bg-gray-700 text-white border-gray-600 focus:border-red-600 focus:ring-red-600"
             />
           </div>
@@ -76,7 +76,7 @@ function Register() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
+              placeholder="Enter Your Confirm Password"
               className="w-full bg-gray-700 text-white border-gray-600 focus:border-red-600 focus:ring-red-600"
             />
           </div>
@@ -92,7 +92,10 @@ function Register() {
         <div className="mt-4 text-gray-400 text-sm">
           <p>
             Already have an account?{" "}
-            <Link to="/login" className="text-white hover:underline cursor-pointer">
+            <Link
+              to="/login"
+              className="text-white hover:underline cursor-pointer"
+            >
               Sign in now.
             </Link>
           </p>

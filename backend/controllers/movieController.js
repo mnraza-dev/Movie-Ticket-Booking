@@ -1,9 +1,10 @@
 import { Movie } from "../models/Movie.js";
+
 export const getMovies = async (req, res) => {
   try {
     const movies = await Movie.find().populate({
       path: "showtimes",
-      select: "startTime totalSeats availableSeats price", 
+      select: "startTime totalSeats availableSeats price",
     });
     if (!movies.length) {
       return res.status(404).json({ message: "No movies found" });
@@ -16,6 +17,22 @@ export const getMovies = async (req, res) => {
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
+  }
+};
+export const getMoviesById = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id).populate("showtimes");
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.json(movie);
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };
 

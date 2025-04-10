@@ -1,15 +1,39 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("jay@gmail.com");
+  const [password, setPassword] = useState("jay@123");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+        { email, password },
+        { withCredentials: true }
+      );
+      setUser(res.data.user);
+      navigate("/movies");
+      console.log("Login successful", res.data);
+    } catch (error) {
+      console.error(
+        "Login failed:",
+        error.response?.data?.message || error.message
+      );
+      alert(
+        "Login failed: " +
+          (error.response?.data?.message || "Something went wrong")
+      );
+    }
   };
 
   return (
@@ -48,7 +72,7 @@ function Login() {
 
           <Button
             type="submit"
-            className="w-full bg-red-600 text-white hover:bg-red-700 transition-colors"
+            className="cursor-pointer w-full bg-red-600 text-white hover:bg-red-700 transition-colors"
           >
             Sign In
           </Button>

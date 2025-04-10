@@ -3,8 +3,8 @@ import { User } from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
 export const registerUser = async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
-  if (!firstname || !lastname || !email || !password) {
+  const { fullname, email, password } = req.body;
+  if (!fullname || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
   try {
@@ -15,13 +15,12 @@ export const registerUser = async (req, res) => {
     const passwordHashed = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      firstname,
-      lastname,
+      fullname,
       email,
       password: passwordHashed,
     });
 
-    const token = generateToken(user._id);
+    const token = generateToken(user);
     res.status(201).json({
       user,
       token,
@@ -43,14 +42,25 @@ export const loginUser = async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = generateToken(user._id);
+    const token = generateToken(user);
 
     if (!token) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    res.cookie("token", token, { httpOnly: true, secure: true });
-    res.status(200).json({ message: "Login successful", user, token });
+    res.cookie("token", token, {
+      httpOnly: false,
+      secure: false,
+      sameSite: "Lax",
+    });
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        fullname: user.fullname,
+        email: user.email,
+      },
+      token,
+    });
   } catch (error) {
     res
       .status(500)
@@ -66,4 +76,28 @@ export const logoutUser = async (req, res) => {
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
+};
+export const updateUser = async (req, res) => {
+  const userId = req.user.id;
+  const { fullname, password } = req.body;
+
+  const update = { fullname };
+  if (password) {
+    const hashed = await bcrypt.hash(password, 10);
+    update.password = hashed;
+  }
+  const user = await User.findByIdAndUpdate(userId, update, {
+    new: true,
+  }).select("-password");
+  const updatedUser = await User.findById(userId);
+  const token = generateToken(updatedUser);
+
+  res.cookie("token", token, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "Lax",
+    maxAge: 1000 * 60 * 60 * 24,
+  });
+
+  res.json({ success: true, user });
 };

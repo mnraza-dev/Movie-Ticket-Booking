@@ -1,13 +1,7 @@
-import { useState } from "react";
 import { format, addDays } from "date-fns";
 
-const BookingCalendar = () => {
-  const [selectedDate, setSelectedDate] = useState(
-    format(new Date(), "yyyyMMdd")
-  );
-
+const BookingCalendar = ({ selectedDate, onDateChange }) => {
   const today = new Date();
-
   const next7Days = Array.from({ length: 7 }, (_, i) => addDays(today, i));
 
   return (
@@ -17,14 +11,13 @@ const BookingCalendar = () => {
         const dayName = format(date, "EEE").toUpperCase();
         const dayNumber = format(date, "dd");
         const monthName = format(date, "MMM").toUpperCase();
-
         const isSelected = selectedDate === id;
 
         return (
           <div
             key={index}
             id={id}
-            onClick={() => setSelectedDate(id)}
+            onClick={() => onDateChange(id)}
             className={`cursor-pointer flex flex-col items-center justify-center px-6 py-4 rounded-xl transition-colors ${
               isSelected
                 ? "bg-red-600 text-primary-foreground"
@@ -40,5 +33,4 @@ const BookingCalendar = () => {
     </div>
   );
 };
-
 export default BookingCalendar;

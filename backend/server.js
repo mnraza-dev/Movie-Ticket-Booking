@@ -3,12 +3,10 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
-
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 app.use("/api/payments/webhook", express.raw({ type: "*/*" }));
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -16,7 +14,7 @@ app.use(
     origin: process.env.CLIENT_URL,
     credentials: true,
   })
-);
+)
 import movieRoutes from "./routes/movieRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import bookRoutes from "./routes/bookRoutes.js";

@@ -1,6 +1,5 @@
 import React from "react";
-import { format } from "date-fns"; // Optional for prettier time formatting
-
+import { format } from "date-fns"; 
 const ShowtimeSlots = ({ showtimes, selectedShowtime, setSelectedShowtime }) => {
   if (!showtimes || showtimes.length === 0) {
     return <div className="text-muted-foreground p-4">No showtimes available.</div>;
@@ -14,7 +13,8 @@ const ShowtimeSlots = ({ showtimes, selectedShowtime, setSelectedShowtime }) => 
         return (
           <div
             key={showtime._id}
-            onClick={() => setSelectedShowtime(formattedTime)}
+            onClick={() => setSelectedShowtime(showtime._id)}
+            // onClick={() => setSelectedShowtime(formattedTime)}
             className={`rounded-lg border cursor-pointer transition-colors ${
               selectedShowtime === formattedTime
                 ? "border-red-600 bg-red-100"

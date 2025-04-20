@@ -120,7 +120,6 @@ export const verifyPaymentCallback = async (req, res) => {
         .status(200)
         .json({ message: "Payment verified and booking confirmed." });
     } else {
-      // Invalid payment signature
       res.status(400).json({ message: "Invalid payment signature" });
     }
   } catch (err) {
